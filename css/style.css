@@ -1,0 +1,420 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.title-bar {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.title-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.edit-icon {
+    color: #6c757d;
+    font-size: 0.9em;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.title-container:hover .edit-icon {
+    opacity: 1;
+}
+
+.buttons {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+}
+
+.buttons .btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+.buttons button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.buttons button i {
+    font-size: 1.1em;
+}
+
+#save-btn {
+    margin-left: 0;
+}
+
+.main-container {
+    width: 100%;
+    height: calc(100vh - 100px); /* Adjust based on your title-bar and buttons height */
+    position: relative;
+}
+
+#canvas {
+    width: calc(100% - 300px);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.bjs-container {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#diagram-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    padding: 2px 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+#diagram-title:hover {
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+#diagram-title:focus {
+    background-color: #fff;
+    border: 1px solid #007bff;
+    outline: none;
+}
+
+#diagram-title:focus + .edit-icon {
+    opacity: 0;
+}
+
+/* Make the PNG button icon slightly different */
+#save-png-btn i {
+    transform: scale(0.9); /* Slightly smaller icon to differentiate */
+}
+
+/* Add a subtle separator between different export types */
+#save-svg-btn {
+    border-right: 1px solid #ddd;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#save-png-btn {
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Right Panel Styles */
+.right-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 300px;
+    background: #f8f9fa;
+    border-left: 1px solid #dee2e6;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, width 0.3s ease;
+    transform: translateX(0); /* Start panel visible */
+}
+
+.right-panel.collapsed {
+    transform: translateX(100%);
+}
+
+.panel-toggle {
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 60px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.panel-toggle i {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+.right-panel.collapsed .panel-toggle i {
+    transform: rotate(180deg);
+}
+
+.panel-content {
+    padding: 1.25rem;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.panel-header h4 {
+    margin: 0;
+    color: #495057;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.panel-section {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Only apply full width when the collapsed class is present */
+#canvas.full-width {
+    width: 100%;
+}
+
+/* Update the editor container styles */
+.editor-container {
+    position: relative;
+    height: calc(100vh - 200px);
+}
+
+#xml-source {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    background-color: transparent;
+    color: transparent;
+    caret-color: #212529;
+    resize: none;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: auto;
+    tab-size: 2;
+    z-index: 1;
+}
+
+.xml-highlighted {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 1rem;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    pointer-events: none;
+    overflow-y: auto;
+    white-space: pre;
+    z-index: 0;
+}
+
+.xml-highlighted code {
+    font-family: inherit;
+    background: transparent !important;
+    padding: 0 !important;
+    white-space: pre;
+    display: block;
+}
+
+#xml-source:focus {
+    outline: none;
+}
+
+.editor-container:focus-within .xml-highlighted {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+/* Update scrollbar styles to apply to both elements */
+.editor-container ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.editor-container ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.editor-container ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.editor-container ::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Update expand button styles */
+.expand-panel {
+    padding: 4px 8px;
+    color: #6c757d;
+    border-color: #dee2e6;
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+
+.expand-panel:hover {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #ced4da;
+}
+
+.expand-panel i {
+    font-size: 1rem;
+}
+
+/* Update right panel styles */
+.right-panel {
+    /* ... existing position and size styles ... */
+    background: #f8f9fa;
+    border-left: 1px solid #dee2e6;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+}
+
+.panel-content {
+    padding: 1.25rem;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* Add a subtle animation for the expand/collapse */
+.right-panel.expanded {
+    width: 600px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add some syntax highlighting-like styles */
+#xml-source {
+    /* ... existing styles ... */
+    caret-color: #495057;
+}
+
+/* Optional: Add a loading state style */
+#xml-source.loading {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.undo-redo-container {
+    display: flex;
+    gap: 5px;
+}
+
+.undo-redo-container button {
+    padding: 4px 8px;
+}
+
+.undo-redo-container button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.undo-redo-container i {
+    font-size: 1.1em;
+}
+
+/* Modify the canvas width calculation when panel is expanded */
+.right-panel.expanded + #canvas {
+    width: calc(100% - 600px);
+}
+
+/* Adjust the transition for smooth width changes */
+.right-panel {
+    /* ... existing styles ... */
+    transition: transform 0.3s ease, width 0.3s ease;
+}
+
+/* Update button styles to use black */
+.btn-outline-secondary,
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-info {
+    color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-info:hover {
+    color: #fff !important;
+    background-color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+/* Keep disabled state looking disabled */
+.btn:disabled {
+    opacity: 0.5;
+    color: #6c757d !important;
+    border-color: #6c757d !important;
+    background-color: transparent !important;
+}
+
+/* Preserve the separator line color */
+#save-svg-btn {
+    border-right-color: #dee2e6;
+}
+
+/* Ensure highlight.js styles are visible */
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.hljs-tag {
+    color: #22863a !important;
+}
+
+.hljs-name {
+    color: #22863a !important;
+}
+
+.hljs-attr {
+    color: #6f42c1 !important;
+}
+
+.hljs-string {
+    color: #032f62 !important;
+} 
+
