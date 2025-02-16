@@ -461,4 +461,73 @@ document.querySelector('.expand-panel').addEventListener('click', () => {
     
     // Trigger a resize event for the BPMN viewer
     window.modeler.get('canvas').zoom('fit-viewport');
+});
+
+// Add keyboard shortcut for deletion
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Delete' || e.key === 'Backspace') {
+        const selection = window.modeler.get('selection');
+        const selectedElements = selection.get();
+        
+        if (selectedElements.length > 0) {
+            e.preventDefault(); // Prevent default delete behavior
+            
+            // Get the context pad
+            const contextPad = window.modeler.get('contextPad');
+            
+            // Get the delete entry from context pad
+            const contextPadEntries = contextPad.getEntries(selectedElements[0]);
+            const deleteEntry = contextPadEntries['delete'];
+            
+            // Trigger the delete action if available
+            if (deleteEntry && deleteEntry.action) {
+                if (typeof deleteEntry.action === 'function') {
+                    deleteEntry.action(selectedElements[0]);
+                } else if (typeof deleteEntry.action.click === 'function') {
+                    deleteEntry.action.click(selectedElements[0]);
+                }
+            }
+        }
+    }
+});
+
+// Add clipboard functionality
+document.addEventListener('keydown', (e) => {
+    // Get required services
+    const copyPaste = window.modeler.get('copyPaste');
+    const selection = window.modeler.get('selection');
+    const keyboard = window.modeler.get('keyboard');
+    
+    // Only handle if we're not in an input/textarea
+    if (e.target.matches('input, textarea')) {
+        return;
+    }
+
+    // Copy: Ctrl/Cmd + C
+    if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+        e.preventDefault();
+        const selectedElements = selection.get();
+        if (selectedElements.length > 0) {
+            copyPaste.copy(selectedElements);
+        }
+    }
+    
+    // Paste: Ctrl/Cmd + V
+    if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+        e.preventDefault();
+        // The copy-paste module handles positioning automatically
+        copyPaste.paste();
+    }
+    
+    // Cut: Ctrl/Cmd + X
+    if ((e.ctrlKey || e.metaKey) && e.key === 'x') {
+        e.preventDefault();
+        const selectedElements = selection.get();
+        if (selectedElements.length > 0) {
+            copyPaste.copy(selectedElements);
+            // Use the modeling service to remove the elements
+            const modeling = window.modeler.get('modeling');
+            modeling.removeElements(selectedElements);
+        }
+    }
 }); 
