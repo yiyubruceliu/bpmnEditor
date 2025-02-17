@@ -1,6 +1,12 @@
 // Make modeler available globally for other modules
 window.modeler = new BpmnJS({
-    container: '#canvas'
+    container: '#canvas',
+    canvas: {
+        deferUpdate: false
+    },
+    grid: {
+        visible: true
+    }
 });
 
 // Initialize these variables at the top of your file

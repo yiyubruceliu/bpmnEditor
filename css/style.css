@@ -75,6 +75,44 @@ body {
     position: absolute !important;
     width: 100% !important;
     height: 100% !important;
+    background-color: white !important;
+}
+
+/* Main grid */
+.djs-container .viewport {
+    position: relative;
+}
+
+.djs-container .viewport::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(#dee2e6 1px, transparent 1px),
+        linear-gradient(90deg, #dee2e6 1px, transparent 1px);
+    background-size: 30px 30px;
+    transform: var(--djs-viewport-transform);
+    transform-origin: 0 0;
+    pointer-events: none;
+}
+
+.djs-container .viewport::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(#f8f9fa 1px, transparent 1px),
+        linear-gradient(90deg, #f8f9fa 1px, transparent 1px);
+    background-size: 10px 10px;
+    transform: var(--djs-viewport-transform);
+    transform-origin: 0 0;
+    pointer-events: none;
 }
 
 #diagram-title {
@@ -720,5 +758,21 @@ kbd {
 
 .color-option.remove-color i {
     font-size: 14px;
+}
+
+/* Canvas grid styling */
+.bjs-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(#f8f9fa 1px, transparent 1px),
+        linear-gradient(90deg, #f8f9fa 1px, transparent 1px);
+    background-size: 10px 10px;
+    background-attachment: fixed;
+    pointer-events: none;
 } 
 
