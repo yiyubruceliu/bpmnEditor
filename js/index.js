@@ -721,4 +721,20 @@ document.getElementById('zoom-out')?.addEventListener('click', () => {
 document.getElementById('zoom-fit')?.addEventListener('click', () => {
     const canvas = window.modeler.get('canvas');
     canvas.zoom('fit-viewport');
+});
+
+// Add handlers for multi-selection copy/paste
+document.getElementById('multi-copy-btn')?.addEventListener('click', () => {
+    const selection = window.modeler.get('selection');
+    const copyPaste = window.modeler.get('copyPaste');
+    const selectedElements = selection.get();
+    
+    if (selectedElements.length > 0) {
+        copyPaste.copy(selectedElements);
+    }
+});
+
+document.getElementById('multi-paste-btn')?.addEventListener('click', () => {
+    const copyPaste = window.modeler.get('copyPaste');
+    copyPaste.paste();
 }); 
