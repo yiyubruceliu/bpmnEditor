@@ -67,6 +67,11 @@
                     </button>
                 </div>
             </div>
+            <div class="shortcuts-toggle">
+                <button class="btn btn-outline-secondary" id="show-shortcuts" title="Keyboard Shortcuts">
+                    <i class="bi bi-keyboard"></i>
+                </button>
+            </div>
         </div>
         <div class="right-panel">
             <button class="panel-toggle">
@@ -116,5 +121,62 @@
 
     <!-- Local scripts (as modules) -->
     <script src="js/index.js"></script>
+
+    <!-- Add this at the bottom of the body, before the scripts -->
+    <div id="keyboard-shortcuts" class="keyboard-overlay" style="display: none;">
+        <div class="keyboard-content">
+            <div class="keyboard-header">
+                <h4>Keyboard Shortcuts</h4>
+                <button class="btn btn-close" id="close-keyboard"></button>
+            </div>
+            <div class="shortcuts-list">
+                <div class="shortcut-group">
+                    <h5>General</h5>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>Z</kbd></span>
+                        <span class="shortcut-desc">Undo</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>Y</kbd></span>
+                        <span class="shortcut-desc">Redo</span>
+                    </div>
+                </div>
+                <div class="shortcut-group">
+                    <h5>Clipboard</h5>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>C</kbd></span>
+                        <span class="shortcut-desc">Copy</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>V</kbd></span>
+                        <span class="shortcut-desc">Paste</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>X</kbd></span>
+                        <span class="shortcut-desc">Cut</span>
+                    </div>
+                </div>
+                <div class="shortcut-group">
+                    <h5>Tools</h5>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>L</kbd></span>
+                        <span class="shortcut-desc">Lasso Tool</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>H</kbd></span>
+                        <span class="shortcut-desc">Hand Tool</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>S</kbd></span>
+                        <span class="shortcut-desc">Space Tool</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>C</kbd></span>
+                        <span class="shortcut-desc">Global Connect</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html> 

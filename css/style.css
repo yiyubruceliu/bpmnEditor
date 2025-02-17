@@ -517,5 +517,111 @@ body {
 /* Remove previous button spacing */
 .zoom-buttons button + button {
     margin: 0;
+}
+
+/* Keyboard shortcuts overlay */
+.keyboard-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.keyboard-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.keyboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.keyboard-header h4 {
+    margin: 0;
+}
+
+.shortcuts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.shortcut-group h5 {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.shortcut-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.shortcut-keys {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+kbd {
+    color: black;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 0.9em;
+    font-family: 'Fira Code', monospace;
+}
+
+.shortcut-desc {
+    color: #666;
+}
+
+/* Shortcuts toggle button */
+.shortcuts-toggle {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 100;
+}
+
+.shortcuts-toggle button {
+    padding: 2px 4px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    transition: all 0.1s ease;
+    border: solid 1px #CCC;
+    background: #F8F8F8;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.shortcuts-toggle button:hover {
+    background: #F8F8F8;
+    border: solid 1px #999;
+}
+
+.shortcuts-toggle button i {
+    font-size: 1em;
+    color: #555;
 } 
 

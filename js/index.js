@@ -639,6 +639,49 @@ window.modeler.on('import.done', () => {
     contextPad.registerProvider(colorContextPadProvider);
 
     console.log("contextPad", contextPad);
+
+    // Add keyboard shortcuts initialization
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded, initializing keyboard shortcuts');
+        
+        // Add keyboard shortcuts handlers
+        const closeButton = document.getElementById('close-keyboard');
+        if (closeButton) {
+            console.log('Adding close button handler');
+            closeButton.addEventListener('click', () => {
+                console.log('Close button clicked');
+                document.getElementById('keyboard-shortcuts').style.display = 'none';
+            });
+        } else {
+            console.error('Close button not found');
+        }
+
+        // Add overlay click handler
+        const overlay = document.getElementById('keyboard-shortcuts');
+        if (overlay) {
+            console.log('Adding overlay click handler');
+            overlay.addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    console.log('Overlay background clicked');
+                    e.currentTarget.style.display = 'none';
+                }
+            });
+        } else {
+            console.error('Keyboard shortcuts overlay not found');
+        }
+
+        // Add toggle button handler
+        const toggleButton = document.getElementById('show-shortcuts');
+        if (toggleButton) {
+            console.log('Adding toggle button handler');
+            toggleButton.addEventListener('click', () => {
+                console.log('Toggle button clicked');
+                toggleKeyboardShortcuts();
+            });
+        } else {
+            console.error('Toggle button not found');
+        }
+    });
 });
 
 // Add multi-selection handler
@@ -737,4 +780,22 @@ document.getElementById('multi-copy-btn')?.addEventListener('click', () => {
 document.getElementById('multi-paste-btn')?.addEventListener('click', () => {
     const copyPaste = window.modeler.get('copyPaste');
     copyPaste.paste();
+});
+
+// Add keyboard shortcuts overlay toggle
+function toggleKeyboardShortcuts() {
+    const overlay = document.getElementById('keyboard-shortcuts');
+    console.log('Toggling keyboard shortcuts overlay');
+    console.log('Current display:', overlay.style.display);
+    overlay.style.display = overlay.style.display === 'none' ? 'flex' : 'none';
+    console.log('New display:', overlay.style.display);
+}
+
+// Keep the keyboard shortcut handler at document level
+document.addEventListener('keydown', (e) => {
+    if (e.key === '?' && (e.ctrlKey || e.metaKey)) {
+        console.log('Keyboard shortcut triggered');
+        e.preventDefault();
+        toggleKeyboardShortcuts();
+    }
 }); 
