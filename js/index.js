@@ -530,4 +530,179 @@ document.addEventListener('keydown', (e) => {
             modeling.removeElements(selectedElements);
         }
     }
+});
+
+// Helper function to adjust color opacity (move this outside of any other function)
+function adjustColorOpacity(hex) {
+    // Remove the # if present
+    hex = hex.replace('#', '');
+    
+    // Convert to a lighter version of the same color
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    
+    // Make it lighter by mixing with white
+    const lighterR = Math.floor(r + (255 - r) * 0.8);
+    const lighterG = Math.floor(g + (255 - g) * 0.8);
+    const lighterB = Math.floor(b + (255 - b) * 0.8);
+    
+    // Convert back to hex
+    return '#' + 
+        lighterR.toString(16).padStart(2, '0') +
+        lighterG.toString(16).padStart(2, '0') +
+        lighterB.toString(16).padStart(2, '0');
+}
+
+// Custom context pad provider for color picker
+function ColorContextPadProvider(contextPad, modeling) {
+    console.log('Initializing ColorContextPadProvider');
+    this._contextPad = contextPad;
+    this._modeling = modeling;
+}
+
+ColorContextPadProvider.$inject = [
+    'contextPad',
+    'modeling'
+];
+
+ColorContextPadProvider.prototype.getContextPadEntries = function(element) {
+    console.log('Getting context pad entries for element:', element);
+    const modeling = this._modeling;
+
+    // Only add color option for shapes, not connections
+    if (!element.waypoints) {
+        console.log('Element is a shape, adding color picker option');
+        return {
+            'custom-color': {
+                group: 'edit',
+                className: 'entry custom-color bpmn-icon-custom-color',
+                title: 'Change color',
+                action: {
+                    click: function(event, element) {
+                        console.log('Color picker clicked for element:', element);
+                        const colorInput = document.createElement('input');
+                        colorInput.type = 'color';
+                        
+                        // Get current color if exists
+                        if (element.di && element.di.get('stroke')) {
+                            console.log('Current color:', element.di.get('stroke'));
+                            colorInput.value = element.di.get('stroke');
+                        }
+
+                        // Position near the cursor
+                        const padPosition = event.target.getBoundingClientRect();
+                        colorInput.style.position = 'fixed';
+                        colorInput.style.left = padPosition.left + 'px';
+                        colorInput.style.top = padPosition.top + 'px';
+                        colorInput.style.opacity = '0';
+                        
+                        document.body.appendChild(colorInput);
+
+                        // Handle color selection
+                        colorInput.addEventListener('change', function(e) {
+                            const color = e.target.value;
+                            console.log('New color selected:', color);
+                            modeling.setColor(element, {
+                                stroke: color,
+                                fill: element.type.includes('Event') ? 
+                                    color : // Events get full color
+                                    adjustColorOpacity(color) // Other shapes get lighter fill
+                            });
+                            document.body.removeChild(colorInput);
+                        });
+
+                        // Handle cancel
+                        colorInput.addEventListener('blur', function() {
+                            console.log('Color picker cancelled');
+                            document.body.removeChild(colorInput);
+                        });
+
+                        colorInput.click();
+                    }
+                }
+            }
+        };
+    }
+    console.log('Element is a connection, skipping color picker');
+    return {};
+};
+
+// Wait for modeler to be initialized before registering the provider
+window.modeler.on('import.done', () => {
+    console.log('Registering ColorContextPadProvider');
+    const contextPad = window.modeler.get('contextPad');
+    const modeling = window.modeler.get('modeling');
+    
+    // Create and register the provider
+    const colorContextPadProvider = new ColorContextPadProvider(contextPad, modeling);
+    contextPad.registerProvider(colorContextPadProvider);
+
+    console.log("contextPad", contextPad);
+});
+
+// Add multi-selection handler
+window.modeler.on('selection.changed', ({ newSelection }) => {
+    console.log('Selection changed:', newSelection);
+    
+    const multiSelectionPanel = document.getElementById('multi-selection-panel');
+    const xmlPanel = document.querySelector('.panel-content:not(#multi-selection-panel)');
+    
+    if (newSelection.length > 1) {
+        // Show multi-selection panel
+        if (multiSelectionPanel) {
+            multiSelectionPanel.style.display = 'block';
+            if (xmlPanel) xmlPanel.style.display = 'none';
+            
+            // Make sure the panel is visible
+            const panel = document.querySelector('.right-panel');
+            if (panel.classList.contains('collapsed')) {
+                panel.classList.remove('collapsed');
+                document.querySelector('#canvas').classList.remove('full-width');
+            }
+        }
+    } else {
+        // Hide multi-selection panel
+        if (multiSelectionPanel) {
+            multiSelectionPanel.style.display = 'none';
+            if (xmlPanel) xmlPanel.style.display = 'block';
+        }
+    }
+});
+
+// Add handlers for multi-selection actions
+document.getElementById('multi-color-btn')?.addEventListener('click', () => {
+    const selection = window.modeler.get('selection');
+    const modeling = window.modeler.get('modeling');
+    const selectedElements = selection.get();
+    
+    // Create color picker
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.style.position = 'fixed';
+    colorInput.style.left = '-1000px';
+    colorInput.style.top = '-1000px';
+    document.body.appendChild(colorInput);
+    
+    // Handle color selection
+    colorInput.addEventListener('change', (e) => {
+        const color = e.target.value;
+        selectedElements.forEach(element => {
+            modeling.setColor(element, {
+                stroke: color,
+                fill: element.type.includes('Event') ? color : adjustColorOpacity(color)
+            });
+        });
+        document.body.removeChild(colorInput);
+    });
+    
+    colorInput.click();
+});
+
+document.getElementById('multi-delete-btn')?.addEventListener('click', () => {
+    const selection = window.modeler.get('selection');
+    const modeling = window.modeler.get('modeling');
+    const selectedElements = selection.get();
+    
+    modeling.removeElements(selectedElements);
 }); 

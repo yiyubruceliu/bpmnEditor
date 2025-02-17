@@ -416,5 +416,56 @@ body {
 
 .hljs-string {
     color: #032f62 !important;
+}
+
+/* Add custom color picker icon */
+.bpmn-icon-custom-color {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.bpmn-icon-custom-color::before {
+    content: '🎨';  /* Unicode paint palette emoji */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+}
+
+/* Style for the context pad entry */
+.djs-context-pad .entry.custom-color {
+    background: white;
+    border-radius: 3px;
+}
+
+.djs-context-pad .entry.custom-color:hover {
+    background: #f0f0f0;
+}
+
+/* Multi-selection panel styles */
+#multi-selection-panel {
+    padding: 1rem;
+}
+
+.multi-selection-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.multi-selection-actions button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.multi-selection-actions i {
+    font-size: 1.1em;
 } 
 
