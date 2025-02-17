@@ -623,5 +623,27 @@ kbd {
 .shortcuts-toggle button i {
     font-size: 1em;
     color: #555;
+}
+
+/* Auto-color toggle styles */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.auto-color-toggle {
+    margin-right: 20px;
+}
+
+.auto-color-toggle .form-check {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.auto-color-toggle .form-check-input {
+    margin-top: 0;
 } 
 

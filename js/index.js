@@ -798,4 +798,65 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         toggleKeyboardShortcuts();
     }
+});
+
+// Add auto-color functionality
+let autoColorEnabled = false;
+
+// Function to get most common color for element type
+function getMostCommonColor(elementType) {
+    const elementRegistry = window.modeler.get('elementRegistry');
+    const allElements = elementRegistry.getAll();
+    
+    // Create a color frequency map for this element type
+    const colorFrequency = {};
+    
+    allElements.forEach(element => {
+        if (element.type === elementType && element.di && element.di.get('stroke')) {
+            const color = element.di.get('stroke');
+            colorFrequency[color] = (colorFrequency[color] || 0) + 1;
+        }
+    });
+    
+    // Find the most common color
+    let mostCommonColor = null;
+    let highestFrequency = 0;
+    
+    Object.entries(colorFrequency).forEach(([color, frequency]) => {
+        if (frequency > highestFrequency) {
+            mostCommonColor = color;
+            highestFrequency = frequency;
+        }
+    });
+    
+    return mostCommonColor;
+}
+
+// Add auto-color toggle handler
+document.getElementById('auto-color-toggle')?.addEventListener('change', (e) => {
+    autoColorEnabled = e.target.checked;
+    console.log('Auto-color toggle changed:', autoColorEnabled);
+});
+
+// Add shape create listener with delayed color application
+window.modeler.on('shape.added', ({ element }) => {
+    if (autoColorEnabled && element.type) {
+        // Wait for the next event loop to apply color
+        setTimeout(() => {
+            try {
+                const modeling = window.modeler.get('modeling');
+                const commonColor = getMostCommonColor(element.type);
+                console.log('Common color:', commonColor);
+                if (commonColor) {
+                    modeling.setColor(element, {
+                        stroke: commonColor,
+                        fill: element.type.includes('Event') ? 
+                            commonColor : adjustColorOpacity(commonColor)
+                    });
+                }
+            } catch (error) {
+                console.error('Error applying auto-color:', error);
+            }
+        }, 0);
+    }
 }); 
