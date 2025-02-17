@@ -566,13 +566,75 @@ ColorContextPadProvider.$inject = [
     'modeling'
 ];
 
+// Function to show color picker popup
+function showColorPicker(event, element, modeling) {
+    const popup = document.getElementById('color-picker-popup');
+    const padPosition = event.target.getBoundingClientRect();
+    
+    // Position the popup near the context pad
+    popup.style.left = `${padPosition.left + padPosition.width + 5}px`;
+    popup.style.top = `${padPosition.top}px`;
+    popup.style.display = 'block';
+    
+    // Handle color option clicks
+    const handleColorClick = (color) => {
+        if (color === 'none') {
+            modeling.setColor(element, {
+                stroke: null,
+                fill: null
+            });
+        } else {
+            modeling.setColor(element, {
+                stroke: color,
+                fill: element.type.includes('Event') ? 
+                    color : adjustColorOpacity(color)
+            });
+        }
+        popup.style.display = 'none';
+    };
+    
+    // Add click handlers to color options
+    document.querySelectorAll('.color-option').forEach(option => {
+        option.onclick = () => handleColorClick(option.dataset.color);
+    });
+    
+    // Handle "More colors" button
+    document.querySelector('.more-colors').onclick = () => {
+        const colorInput = document.createElement('input');
+        colorInput.type = 'color';
+        
+        // Get current color if exists
+        if (element.di && element.di.get('stroke')) {
+            colorInput.value = element.di.get('stroke');
+        }
+        
+        colorInput.style.position = 'fixed';
+        colorInput.style.opacity = '0';
+        document.body.appendChild(colorInput);
+        
+        colorInput.addEventListener('change', (e) => {
+            handleColorClick(e.target.value);
+            document.body.removeChild(colorInput);
+        });
+        
+        colorInput.click();
+        popup.style.display = 'none';
+    };
+    
+    // Close popup when clicking outside
+    document.addEventListener('click', function closePopup(e) {
+        if (!popup.contains(e.target) && !event.target.contains(e.target)) {
+            popup.style.display = 'none';
+            document.removeEventListener('click', closePopup);
+        }
+    });
+}
+
+// Update the context pad color picker action
 ColorContextPadProvider.prototype.getContextPadEntries = function(element) {
-    console.log('Getting context pad entries for element:', element);
     const modeling = this._modeling;
 
-    // Only add color option for shapes, not connections
     if (!element.waypoints) {
-        console.log('Element is a shape, adding color picker option');
         return {
             'custom-color': {
                 group: 'edit',
@@ -580,51 +642,12 @@ ColorContextPadProvider.prototype.getContextPadEntries = function(element) {
                 title: 'Change color',
                 action: {
                     click: function(event, element) {
-                        console.log('Color picker clicked for element:', element);
-                        const colorInput = document.createElement('input');
-                        colorInput.type = 'color';
-                        
-                        // Get current color if exists
-                        if (element.di && element.di.get('stroke')) {
-                            console.log('Current color:', element.di.get('stroke'));
-                            colorInput.value = element.di.get('stroke');
-                        }
-
-                        // Position near the cursor
-                        const padPosition = event.target.getBoundingClientRect();
-                        colorInput.style.position = 'fixed';
-                        colorInput.style.left = padPosition.left + 'px';
-                        colorInput.style.top = padPosition.top + 'px';
-                        colorInput.style.opacity = '0';
-                        
-                        document.body.appendChild(colorInput);
-
-                        // Handle color selection
-                        colorInput.addEventListener('change', function(e) {
-                            const color = e.target.value;
-                            console.log('New color selected:', color);
-                            modeling.setColor(element, {
-                                stroke: color,
-                                fill: element.type.includes('Event') ? 
-                                    color : // Events get full color
-                                    adjustColorOpacity(color) // Other shapes get lighter fill
-                            });
-                            document.body.removeChild(colorInput);
-                        });
-
-                        // Handle cancel
-                        colorInput.addEventListener('blur', function() {
-                            console.log('Color picker cancelled');
-                            document.body.removeChild(colorInput);
-                        });
-
-                        colorInput.click();
+                        showColorPicker(event, element, modeling);
                     }
                 }
             }
         };
     }
-    console.log('Element is a connection, skipping color picker');
     return {};
 };
 
