@@ -467,5 +467,55 @@ body {
 
 .multi-selection-actions i {
     font-size: 1.1em;
+}
+
+/* Zoom controls */
+.djs-zoom-controls {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 100;
+}
+
+.zoom-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;  /* Reduced gap to match palette */
+    background: #F8F8F8;  /* Match djs-palette background */
+    padding: 5px;  /* Match djs-palette padding */
+    border: solid 1px #CCC;  /* Match djs-palette border */
+    border-radius: 2px;  /* Match djs-palette border-radius */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);  /* Match djs-palette shadow */
+}
+
+.zoom-buttons button {
+    padding: 2px 4px;  /* Match palette entry padding */
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;  /* Match palette entry size */
+    height: 24px;
+    border-radius: 3px;  /* Match palette entry border-radius */
+    transition: all 0.1s ease;
+    border: solid 1px transparent;  /* For hover state */
+    background: transparent;
+}
+
+.zoom-buttons button:hover {
+    background: #F8F8F8;  /* Match palette hover */
+    border: solid 1px #CCC;  /* Match palette hover border */
+    transform: none;  /* Remove previous transform */
+    box-shadow: none;  /* Remove previous shadow */
+}
+
+.zoom-buttons button i {
+    font-size: 1em;  /* Match palette icon size */
+    color: #555;  /* Match palette icon color */
+}
+
+/* Remove previous button spacing */
+.zoom-buttons button + button {
+    margin: 0;
 } 
 

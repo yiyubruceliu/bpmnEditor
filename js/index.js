@@ -705,4 +705,20 @@ document.getElementById('multi-delete-btn')?.addEventListener('click', () => {
     const selectedElements = selection.get();
     
     modeling.removeElements(selectedElements);
+});
+
+// Add zoom control handlers
+document.getElementById('zoom-in')?.addEventListener('click', () => {
+    const zoomScroll = window.modeler.get('zoomScroll');
+    zoomScroll.stepZoom(1);
+});
+
+document.getElementById('zoom-out')?.addEventListener('click', () => {
+    const zoomScroll = window.modeler.get('zoomScroll');
+    zoomScroll.stepZoom(-1);
+});
+
+document.getElementById('zoom-fit')?.addEventListener('click', () => {
+    const canvas = window.modeler.get('canvas');
+    canvas.zoom('fit-viewport');
 }); 
