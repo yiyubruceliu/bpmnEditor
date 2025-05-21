@@ -60,9 +60,101 @@ body {
 }
 
 .main-container {
+    display: flex;
+    height: calc(100vh - 120px);
+}
+
+/* Left panel styles */
+.left-panel {
+    width: 300px;
+    height: 100%;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
+
+.left-panel .panel-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.left-panel .panel-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.left-panel .panel-header h4 {
+    margin: 0;
+    color: #495057;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.left-panel .panel-section {
+    flex-grow: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 95%;
+    overflow-y: hidden;
+}
+
+/* Chat container styles */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 2px;
+    background-color: #f8f9fa;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.chat-input {
+    flex-grow: 1;
+    resize: none;
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 2px;
+    font-family: inherit;
+    height: 40px;
     width: 100%;
-    height: calc(100vh - 100px); /* Adjust based on your title-bar and buttons height */
+    background-color: #f8f9fa;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.send-message {
+    padding: 0.5rem 1rem;
+    height: fit-content;
+    border-radius: 2px;
+    height: 40px;
+}
+
+/* Canvas styles */
+#canvas {
+    flex-grow: 1;
     position: relative;
+    height: 100%;
 }
 
 #canvas {
@@ -161,7 +253,7 @@ body {
 .right-panel {
     position: absolute;
     right: 0;
-    top: 0;
+    top: 55px;
     height: 100%;
     width: 300px;
     background: #f8f9fa;
@@ -227,7 +319,7 @@ body {
     margin-bottom: 1rem;
     padding: 0.75rem;
     background: #ffffff;
-    border-radius: 8px;
+    border-radius: 2px;
     border: 1px solid #e9ecef;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }

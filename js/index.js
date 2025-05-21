@@ -126,7 +126,6 @@ async function initializeBpmn() {
 
 // Call the initialization function
 initializeBpmn();
-
 // Replace the load button event listener with this version that handles both modern and legacy approaches
 document.getElementById('load-btn').addEventListener('click', async () => {
     if (hasFileSystemAccess) {
@@ -144,7 +143,8 @@ document.getElementById('load-btn').addEventListener('click', async () => {
             lastFileHandle = fileHandle;
             const file = await fileHandle.getFile();
             document.getElementById('diagram-title').textContent = file.name;
-            
+            document.title = file.name + ' - BPMN.io Editor';
+
             const text = await file.text();
             await window.modeler.importXML(text);
             await updateXMLSource();
@@ -162,6 +162,8 @@ document.getElementById('load-btn').addEventListener('click', async () => {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('diagram-title').textContent = file.name;
+                document.title = file.name + ' - BPMN.io Editor';
+
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     try {
@@ -189,6 +191,7 @@ document.getElementById('save-btn').addEventListener('click', async () => {
                 await writable.write(xml);
                 await writable.close();
                 document.getElementById('diagram-title').textContent = lastFileHandle.name;
+                document.title = lastFileHandle.name + ' - BPMN.io Editor';
                 return;
             } catch (err) {
                 console.error('Error saving to last location:', err);
@@ -207,6 +210,7 @@ document.getElementById('save-btn').addEventListener('click', async () => {
         }
         link.download = fileName;
         document.getElementById('diagram-title').textContent = fileName;
+        document.title = fileName + ' - BPMN.io Editor';
         link.click();
         
     } catch (err) {
@@ -548,10 +552,10 @@ function adjustColorOpacity(hex) {
     const g = parseInt(hex.slice(2, 4), 16);
     const b = parseInt(hex.slice(4, 6), 16);
     
-    // Make it lighter by mixing with white
-    const lighterR = Math.floor(r + (255 - r) * 0.8);
-    const lighterG = Math.floor(g + (255 - g) * 0.8);
-    const lighterB = Math.floor(b + (255 - b) * 0.8);
+    // Make it darker by mixing with black
+    const lighterR = Math.floor(r * 0.8);
+    const lighterG = Math.floor(g * 0.8);
+    const lighterB = Math.floor(b * 0.8);
     
     // Convert back to hex
     return '#' + 
@@ -583,7 +587,7 @@ function showColorPicker(event, element, modeling) {
     popup.style.display = 'block';
     
     // Handle color option clicks
-    const handleColorClick = (color) => {
+    const handleColorClick = (color, stroke) => {
         if (color === 'none') {
             modeling.setColor(element, {
                 stroke: null,
@@ -591,9 +595,11 @@ function showColorPicker(event, element, modeling) {
             });
         } else {
             modeling.setColor(element, {
-                stroke: color,
+                stroke: element.type.includes('Event') ?
+                    stroke ? stroke : adjustColorOpacity(color) :
+                    adjustColorOpacity(color),
                 fill: element.type.includes('Event') ? 
-                    color : adjustColorOpacity(color)
+                    color : color
             });
         }
         popup.style.display = 'none';
@@ -601,7 +607,7 @@ function showColorPicker(event, element, modeling) {
     
     // Add click handlers to color options
     document.querySelectorAll('.color-option').forEach(option => {
-        option.onclick = () => handleColorClick(option.dataset.color);
+        option.onclick = () => handleColorClick(option.dataset.color, option.dataset.stroke);
     });
     
     // Handle "More colors" button
@@ -841,8 +847,8 @@ function getMostCommonColor(elementType) {
     const colorFrequency = {};
     
     allElements.forEach(element => {
-        if (element.type === elementType && element.di && element.di.get('stroke')) {
-            const color = element.di.get('stroke');
+        if (element.type === elementType && element.di && element.di.get('fill')) {
+            const color = element.di.get('fill');
             colorFrequency[color] = (colorFrequency[color] || 0) + 1;
         }
     });
@@ -878,9 +884,10 @@ window.modeler.on('shape.added', ({ element }) => {
                 console.log('Common color:', commonColor);
                 if (commonColor) {
                     modeling.setColor(element, {
-                        stroke: commonColor,
+                        stroke: element.type.includes('Event') ? 
+                        adjustColorOpacity(commonColor) : adjustColorOpacity(commonColor),
                         fill: element.type.includes('Event') ? 
-                            commonColor : adjustColorOpacity(commonColor)
+                            commonColor : commonColor
                     });
                 }
             } catch (error) {
@@ -888,4 +895,10 @@ window.modeler.on('shape.added', ({ element }) => {
             }
         }, 0);
     }
+});
+
+// Add this near the top with other event listeners
+window.addEventListener('beforeunload', function(e) {
+    // Show confirmation dialog
+    return e.preventDefault();
 }); 

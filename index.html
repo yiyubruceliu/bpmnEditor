@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>BPMN.io Editor</title>
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAF0WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4yLWMwMDAgNzkuMWI2NWE3OWI0LCAyMDIyLzA2LzEzLTIyOjAxOjAxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjQuMCAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDI0LTAzLTIwVDEyOjQ3OjA2KzAxOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI0LTAzLTIwVDEyOjQ3OjA2KzAxOjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyNC0wMy0yMFQxMjo0NzowNiswMTowMCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo5ZDFiZjM4Yy1mZDY5LTRlNDItODY0ZC1mODEwZjE0ZjQ5ZjAiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDo5ZDFiZjM4Yy1mZDY5LTRlNDItODY0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">
     <!-- BPMN.io dependencies -->
     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.0.3/dist/assets/diagram-js.css">
     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.0.3/dist/assets/bpmn-font/css/bpmn.css">
@@ -61,6 +62,23 @@
         </div>
     </div>
     <div class="main-container">
+        <div class="left-panel">
+            <div class="panel-content">
+                <div class="panel-section">
+                    <div class="chat-container">
+                        <div class="chat-messages">
+                            <!-- Messages will be dynamically added here -->
+                        </div>
+                        <div class="chat-input-container">
+                            <textarea class="chat-input" placeholder="Type your message..." rows="3"></textarea>
+                            <button class="btn btn-outline-info send-message">
+                                <i class="bi bi-send"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="canvas">
             <div class="djs-zoom-controls">
                 <div class="zoom-buttons">
@@ -193,11 +211,11 @@
             <button class="color-option remove-color" data-color="none" title="Remove color">
                 <i class="bi bi-x-lg"></i>
             </button>
-            <button class="color-option" data-color="#90CAF9" style="background-color: #90CAF9;"></button>
-            <button class="color-option" data-color="#FFCC80" style="background-color: #FFCC80;"></button>
-            <button class="color-option" data-color="#A5D6A7" style="background-color: #A5D6A7;"></button>
-            <button class="color-option" data-color="#EF9A9A" style="background-color: #EF9A9A;"></button>
-            <button class="color-option" data-color="#CE93D8" style="background-color: #CE93D8;"></button>
+            <button class="color-option" data-color="#90CAF9" data-stroke="#5e778b" style="background-color: #90CAF9;border-color: #5e778b;"></button>
+            <button class="color-option" data-color="#FFCC80" data-stroke="#ad9877" style="background-color: #FFCC80;border-color: #ad9877;"></button>
+            <button class="color-option" data-color="#A5D6A7" data-stroke="#618b62" style="background-color: #A5D6A7;border-color: #618b62;"></button>
+            <button class="color-option" data-color="#EF9A9A" data-stroke="#885d5d" style="background-color: #EF9A9A;border-color: #885d5d;"></button>
+            <button class="color-option" data-color="#CE93D8" data-stroke="#7c5c81" style="background-color: #CE93D8;border-color: #7c5c81;"></button>
             <button class="more-colors">More colours...</button>
         </div>
     </div>
