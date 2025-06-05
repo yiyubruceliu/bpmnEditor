@@ -901,4 +901,64 @@ window.modeler.on('shape.added', ({ element }) => {
 window.addEventListener('beforeunload', function(e) {
     // Show confirmation dialog
     return e.preventDefault();
-}); 
+});
+
+// Chat message handling
+let chatMessages = [
+    { system: "How can I help you?" }
+];
+
+function updateChatMessages() {
+    const chatMessagesContainer = document.querySelector('.chat-messages');
+    chatMessagesContainer.innerHTML = ''; // Clear existing messages
+
+    chatMessages.forEach(message => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message';
+        
+        if (message.system) {
+            messageDiv.classList.add('system-message');
+            messageDiv.innerHTML = `<div class="message-content">${message.system}</div>`;
+        } else if (message.user) {
+            messageDiv.classList.add('user-message');
+            messageDiv.innerHTML = `<div class="message-content">${message.user}</div>`;
+        }
+        
+        chatMessagesContainer.appendChild(messageDiv);
+    });
+
+    // Scroll to bottom
+    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+}
+
+// Send message handler
+document.querySelector('.send-message').addEventListener('click', () => {
+    const input = document.querySelector('.chat-input');
+    const message = input.value.trim();
+    
+    if (message) {
+        chatMessages.push({ user: message });
+        input.value = '';
+        updateChatMessages();
+        setTimeout(() => {
+            // Wait 1 second before continuing
+        }, 1000);
+        systemMessage("This feature is coming soon. Please check in with us later.");
+    }
+});
+
+function systemMessage(message) {
+    chatMessages.push({ system: message });
+    updateChatMessages();
+}
+
+// Enter key handler
+document.querySelector('.chat-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        document.querySelector('.send-message').click();
+    }
+});
+
+// Initialize chat messages
+updateChatMessages(); 
